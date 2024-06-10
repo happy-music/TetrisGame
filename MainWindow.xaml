@@ -43,6 +43,5 @@
         <TextBlock Text="Next Unit" Grid.Column="1" HorizontalAlignment="Center" FontSize="15" VerticalAlignment="Center"/>
         <customControl:TetrisControl x:Name="tetris" Margin="10" Grid.Row="1" Grid.Column="0" Datas="{Binding MainDatas}"/>
         <customControl:TetrisControl Height="120" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Datas="{Binding PreviewView.Data}"/>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1"/>
     </Grid>
 </Window>

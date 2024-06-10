@@ -11,6 +11,8 @@ namespace TetrisGame
     {
         private readonly int _row = 20;
         private readonly int _column = 12;
+        //下降时间
+        private TimeSpan _downTime;
 
         private CancellationTokenSource? _cts;
         private MainView _mainView;
@@ -22,12 +24,19 @@ namespace TetrisGame
         private int[,] mainDatas;
 
         [ObservableProperty]
-        private int score = 0;
+        private int score;
 
         public TetrisViewModel()
         {
-            _mainView = new MainView(_row, _column);
             _previewView = new PreviewView();
+            _downTime = TimeSpan.FromSeconds(0.3);
+            Initial();
+        }
+    
+        private void Initial()
+        {
+            Score = 0;
+            _mainView = new MainView(_row, _column);
             MainDatas = new int[_row, _column];
         }
 
@@ -47,7 +56,7 @@ namespace TetrisGame
                         MainDatas = _mainView.GetMainViewData();
                     }
 
-                    await Task.Delay(700, _cts.Token);
+                    await Task.Delay(_downTime, _cts.Token);
 
                     var canDown = _mainView.Down();
 
@@ -89,9 +98,7 @@ namespace TetrisGame
         private void Stop()
         {
             Suspent();
-            Score=0;
-            _mainView = new(_row, _column);
-            MainDatas = new int[_row, _column];
+            Initial();
         }
 
         [RelayCommand]

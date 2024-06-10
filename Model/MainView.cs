@@ -5,7 +5,7 @@ namespace TetrisGame.Model
     internal class MainView
     {
         //缓冲行
-        private readonly int bufferRow = 4;
+        private readonly int bufferRow = 3;
         private readonly int _row;
         private readonly int _column;
 
@@ -28,7 +28,7 @@ namespace TetrisGame.Model
             {
                 return Data;
             }
-            //上方预留4行作为缓冲区
+            //上方预留缓冲区
             var unit = CurrentUnit.GetContainPosition(_row + bufferRow, _column);
 
             for (int i = 0; i < Data.GetLength(0); i++)
@@ -49,7 +49,7 @@ namespace TetrisGame.Model
         /// 检查并消除
         /// </summary>
         /// <returns></returns>
-        public (int count,List<int> eliminateRows)  CheckAndEliminate()
+        public (int count, List<int> eliminateRows) CheckAndEliminate()
         {
             List<int> eliminateRows = [];
             int eliminateCount = 0;
@@ -106,16 +106,19 @@ namespace TetrisGame.Model
         /// <returns></returns>
         public bool Down()
         {
-            if (InLowerBoundary())
-                return false;
+            lock (this)
+            {
+                if (InLowerBoundary())
+                    return false;
 
-            var temporaryData = CurrentUnit.GetDownPosition(_row + bufferRow, _column);
+                var temporaryData = CurrentUnit.GetDownPosition(_row + bufferRow, _column);
 
-            if (IsOverlap(temporaryData))
-                return false;
+                if (IsOverlap(temporaryData))
+                    return false;
 
-            CurrentUnit.X++;
-            return true;
+                CurrentUnit.X++;
+                return true;
+            }
         }
 
         /// <summary>
